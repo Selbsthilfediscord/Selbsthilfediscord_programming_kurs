@@ -1,1 +1,100 @@
-/*bamame */
+/* Grundlegende Stildefinitionen für die gesamte Seite */
+body {
+    font-family: 'Inter', sans-serif; /* Standard-Schriftart für den Körper */
+    background-color: #f0f4f8; /* Heller Hintergrund für die Seite */
+    color: #333; /* Dunkle Textfarbe für gute Lesbarkeit */
+    transition: background-color 0.3s ease, color 0.3s ease; /* Sanfter Übergang für den Theme-Wechsel */
+}
+/* Dark Mode Basisstile */
+body.dark {
+    background-color: #1a202c; /* Dunkler Hintergrund für den Dark Mode */
+    color: #e2e8f0; /* Helle Textfarbe für den Dark Mode */
+}
+/* Stil für den Lade-Indikator */
+.loader {
+    border: 4px solid #f3f3f3; /* Helle Kreis-Farbe */
+    border-top: 4px solid #3498db; /* Blaue Kreis-Farbe */
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    animation: spin 1s linear infinite; /* Animationsdefinition */
+    display: none; /* Standardmäßig versteckt */
+    margin: 1rem auto; /* Zentrieren und Abstand */
+}
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+/* Tailwind Dark Mode Overrides */
+.bg-white.dark\:bg-gray-800 {
+    background-color: #ffffff;
+}
+.dark .bg-white.dark\:bg-gray-800 {
+    background-color: #2d3748;
+}
+.text-gray-800.dark\:text-white {
+    color: #333;
+}
+.dark .text-gray-800.dark\:text-white {
+    color: #e2e8f0;
+}
+.bg-gray-100.dark\:bg-gray-900 {
+    background-color: #f0f4f8;
+}
+.dark .bg-gray-100.dark\:bg-gray-900 {
+    background-color: #1a202c;
+}
+.text-gray-600.dark\:text-gray-300 {
+    color: #718096;
+}
+.dark .text-gray-600.dark\:text-gray-300 {
+    color: #a0aec0;
+}
+.bg-gray-50.dark\:bg-gray-700 {
+    background-color: #f9fafb;
+}
+.dark .bg-gray-50.dark\:bg-gray-700 {
+    background-color: #4a5568;
+}
+.text-gray-700.dark\:text-gray-200 {
+    color: #4a5568;
+}
+.dark .text-gray-700.dark\:text-gray-200 {
+    color: #cbd5e0;
+}
+.text-blue-700.dark\:text-blue-300 {
+    color: #2b6cb0;
+}
+.dark .text-blue-700.dark\:text-blue-300 {
+    color: #90cdf4;
+}
+.text-green-700.dark\:text-green-300 {
+    color: #2f855a;
+}
+.dark .text-green-700.dark\:text-green-300 {
+    color: #68d391;
+}
+.text-purple-700.dark\:text-purple-300 {
+    color: #6b46c1;
+}
+.dark .text-purple-700.dark\:text-purple-300 {
+    color: #d6bcfa;
+}
+.border-gray-300.dark\:border-gray-600 {
+    border-color: #cbd5e0;
+}
+.dark .border-gray-300.dark\:border-gray-600 {
+    border-color: #4a5568;
+}
+.bg-gray-800.dark\:bg-gray-900 {
+    background-color: #2d3748;
+}
+.dark .bg-gray-800.dark\:bg-gray-900 {
+    background-color: #1a202c;
+}
+.text-gray-400.dark\:text-gray-500 {
+    color: #a0aec0;
+}
+.dark .text-gray-400.dark\:text-gray-500 {
+    color: #718096;
+}
