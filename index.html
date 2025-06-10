@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Programmierkurs für Discord Server</title>
+    <!-- Tailwind CSS CDN für schnelles und responsives Styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts - Inter für eine moderne und leserliche Schriftart -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Grundlegende Stildefinitionen für die gesamte Seite */
+        body {
+            font-family: 'Inter', sans-serif; /* Standard-Schriftart für den Körper */
+            background-color: #f0f4f8; /* Heller Hintergrund für die Seite */
+            color: #333; /* Dunkle Textfarbe für gute Lesbarkeit */
+            transition: background-color 0.3s ease, color 0.3s ease; /* Sanfter Übergang für den Theme-Wechsel */
+        }
+        /* Dark Mode Basisstile */
+        body.dark {
+            background-color: #1a202c; /* Dunkler Hintergrund für den Dark Mode */
+            color: #e2e8f0; /* Helle Textfarbe für den Dark Mode */
+        }
+        /* Stil für den Lade-Indikator */
+        .loader {
+            border: 4px solid #f3f3f3; /* Helle Kreis-Farbe */
+            border-top: 4px solid #3498db; /* Blaue Kreis-Farbe */
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite; /* Animationsdefinition */
+            display: none; /* Standardmäßig versteckt */
+            margin: 1rem auto; /* Zentrieren und Abstand */
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        /* Tailwind Dark Mode Overrides */
+        .bg-white.dark\:bg-gray-800 {
+            background-color: #ffffff;
+        }
+        .dark .bg-white.dark\:bg-gray-800 {
+            background-color: #2d3748;
+        }
+        .text-gray-800.dark\:text-white {
+            color: #333;
+        }
+        .dark .text-gray-800.dark\:text-white {
+            color: #e2e8f0;
+        }
+        .bg-gray-100.dark\:bg-gray-900 {
+            background-color: #f0f4f8;
+        }
+        .dark .bg-gray-100.dark\:bg-gray-900 {
+            background-color: #1a202c;
+        }
+        .text-gray-600.dark\:text-gray-300 {
+            color: #718096;
+        }
+        .dark .text-gray-600.dark\:text-gray-300 {
+            color: #a0aec0;
+        }
+        .bg-gray-50.dark\:bg-gray-700 {
+            background-color: #f9fafb;
+        }
+        .dark .bg-gray-50.dark\:bg-gray-700 {
+            background-color: #4a5568;
+        }
+        .text-gray-700.dark\:text-gray-200 {
+            color: #4a5568;
+        }
+        .dark .text-gray-700.dark\:text-gray-200 {
+            color: #cbd5e0;
+        }
+        .text-blue-700.dark\:text-blue-300 {
+            color: #2b6cb0;
+        }
+        .dark .text-blue-700.dark\:text-blue-300 {
+            color: #90cdf4;
+        }
+        .text-green-700.dark\:text-green-300 {
+            color: #2f855a;
+        }
+        .dark .text-green-700.dark\:text-green-300 {
+            color: #68d391;
+        }
+        .text-purple-700.dark\:text-purple-300 {
+            color: #6b46c1;
+        }
+        .dark .text-purple-700.dark\:text-purple-300 {
+            color: #d6bcfa;
+        }
+        .border-gray-300.dark\:border-gray-600 {
+            border-color: #cbd5e0;
+        }
+        .dark .border-gray-300.dark\:border-gray-600 {
+            border-color: #4a5568;
+        }
+        .bg-gray-800.dark\:bg-gray-900 {
+            background-color: #2d3748;
+        }
+        .dark .bg-gray-800.dark\:bg-gray-900 {
+            background-color: #1a202c;
+        }
+        .text-gray-400.dark\:text-gray-500 {
+            color: #a0aec0;
+        }
+        .dark .text-gray-400.dark\:text-gray-500 {
+            color: #718096;
+        }
+    </style>
+</head>
+<body class="antialiased">
+    <!-- Header-Bereich: Obere Navigationsleiste und Titel -->
+    <header class="bg-gradient-to-r from-blue-600 to-indigo-700 text-white p-6 shadow-lg rounded-b-xl">
+        <div class="container mx-auto flex flex-col md:flex-row justify-between items-center">
+            <!-- Titel der Webseite/des Kurses -->
+            <h1 class="text-4xl font-extrabold mb-4 md:mb-0">
+                Programmierkurs für deinen Discord Server
+            </h1>
+            <!-- Navigationsmenü -->
+            <nav>
+                <ul class="flex flex-wrap justify-center space-x-6 items-center">
+                    <li><a href="#overview" class="hover:text-blue-200 transition duration-300 text-lg font-medium">Kursübersicht</a></li>
+                    <li><a href="#modules" class="hover:text-blue-200 transition duration-300 text-lg font-medium">Module</a></li>
+                    <li><a href="#ai-helper" class="hover:text-blue-200 transition duration-300 text-lg font-medium">KI-Helfer</a></li>
+                    <li><a href="#resources" class="hover:text-blue-200 transition duration-300 text-lg font-medium">Ressourcen</a></li>
+                    <li><a href="#contact" class="hover:text-blue-200 transition duration-300 text-lg font-medium">Kontakt</a></li>
+                    <!-- Neue Schaltfläche für Dark Mode / Light Mode -->
+                    <li>
+                        <button id="themeToggle" class="p-2 rounded-full bg-blue-500 hover:bg-blue-600 transition duration-300 ease-in-out">
+                            <!-- SVG für Sonnen-/Mond-Icon (wird per JS getauscht) -->
+                            <svg id="sunIcon" class="w-6 h-6 text-yellow-300" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.459 4.591a1 1 0 01-1.414 0l-.707-.707a1 1 0 011.414-1.414l.707.707a1 1 0 010 1.414zM10 15a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zm-4.591-4.459a1 1 0 010-1.414l-.707-.707a1 1 0 01-1.414 1.414l.707.707a1 1 0 011.414 0z"/>
+                            </svg>
+                            <svg id="moonIcon" class="w-6 h-6 text-gray-200 hidden" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"/>
+                            </svg>
+                        </button>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero-Bereich: Großer Einleitungsbereich mit Call-to-Action -->
+    <section class="bg-white dark:bg-gray-800 py-20 px-6 rounded-lg shadow-md mx-4 mt-8 md:mx-auto max-w-6xl text-center">
+        <h2 class="text-5xl font-bold text-gray-800 dark:text-white mb-6 leading-tight">
+            Starte deine Programmier-Reise noch heute!
+        </h2>
+        <p class="text-xl text-gray-600 dark:text-gray-300 mb-8 max-w-3xl mx-auto">
+            Egal, ob du Anfänger bist oder deine Fähigkeiten erweitern möchtest – unser Kurs bietet dir die Grundlagen und fortgeschrittene Konzepte in einer unterstützenden Umgebung.
+        </p>
+        <!-- Call-to-Action Button -->
+        <a href="#modules" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-8 rounded-full shadow-lg transition duration-300 transform hover:scale-105 inline-block">
+            Zum Kurs starten
+        </a>
+    </section>
+
+    <!-- Kursübersicht-Bereich -->
+    <section id="overview" class="py-16 px-6 bg-gray-100 dark:bg-gray-900 rounded-lg shadow-md mx-4 mt-8 md:mx-auto max-w-6xl">
+        <h2 class="text-4xl font-bold text-center text-gray-800 dark:text-white mb-12">Kursübersicht</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Feature Box 1 -->
+            <div class="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-lg hover:shadow-xl transition duration-300 flex flex-col items-center text-center">
+                <div class="bg-blue-500 text-white rounded-full p-4 mb-4">
+                    <!-- Icon für Anfängerfreundlich (z.B. ein einfaches Stern-Symbol) -->
+                    <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                </div>
+                <h3 class="text-2xl font-semibold text-gray-700 dark:text-gray-200 mb-4">Anfängerfreundlich</h3>
+                <p class="text-gray-600 dark:text-gray-300">
+                    Wir beginnen bei Null und erklären jeden Schritt ausführlich. Keine Vorkenntnisse erforderlich!
+                </p>
+            </div>
+            <!-- Feature Box 2 -->
+            <div class="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-lg hover:shadow-xl transition duration-300 flex flex-col items-center text-center">
+                <div class="bg-green-500 text-white rounded-full p-4 mb-4">
+                    <!-- Icon für Praxisorientiert (z.B. ein Code-Symbol) -->
+                    <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/><path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"></path></svg>
+                </div>
+                <h3 class="text-2xl font-semibold text-gray-700 dark:text-gray-200 mb-4">Praxisorientiert</h3>
+                <p class="text-gray-600 dark:text-gray-300">
+                    Lerne durch praktische Projekte und Übungen, die du direkt umsetzen kannst.
+                </p>
+            </div>
+            <!-- Feature Box 3 -->
+            <div class="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-lg hover:shadow-xl transition duration-300 flex flex-col items-center text-center">
+                <div class="bg-purple-500 text-white rounded-full p-4 mb-4">
+                    <!-- Icon für Discord-Community (z.B. ein Chat-Symbol) -->
+                    <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.336-3.11c-.813-1.013-1.336-2.22-1.336-3.89C2 6.134 5.582 3 10 3s8 3.134 8 7z" clip-rule="evenodd"></path></svg>
+                </div>
+                <h3 class="text-2xl font-semibold text-gray-700 dark:text-gray-200 mb-4">Discord-Community</h3>
+                <p class="text-gray-600 dark:text-gray-300">
+                    Tausche dich mit anderen Lernenden aus und erhalte Unterstützung von Mentoren.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Module-Bereich: Auflistung der Kursmodule -->
+    <section id="modules" class="py-16 px-6 bg-white dark:bg-gray-800 rounded-lg shadow-md mx-4 mt-8 md:mx-auto max-w-6xl">
+        <h2 class="text-4xl font-bold text-center text-gray-800 dark:text-white mb-12">Unsere Module</h2>
+        <div class="space-y-8">
+            <!-- Modul 1: Einführung in die Programmierung -->
+            <div class="bg-gray-50 dark:bg-gray-700 p-6 rounded-xl shadow-md hover:shadow-lg transition duration-300">
+                <h3 class="text-2xl font-semibold text-blue-700 dark:text-blue-300 mb-3">Modul 1: Erste Schritte mit Python</h3>
+                <p class="text-gray-700 dark:text-gray-200 mb-4">
+                    Lerne die Grundlagen der Programmierung mit Python. Wir behandeln Variablen, Datentypen, Operatoren und einfache Kontrollstrukturen.
+                </p>
+                <ul class="list-disc list-inside text-gray-600 dark:text-gray-300 space-y-1">
+                    <li>Installation von Python und Entwicklungsumgebung</li>
+                    <li>Syntax und grundlegende Konzepte</li>
+                    <li>Einfache Programme schreiben</li>
+                </ul>
+            </div>
+            <!-- Modul 2: Webentwicklung Grundlagen -->
+            <div class="bg-gray-50 dark:bg-gray-700 p-6 rounded-xl shadow-md hover:shadow-lg transition duration-300">
+                <h3 class="text-2xl font-semibold text-green-700 dark:text-green-300 mb-3">Modul 2: HTML & CSS für Webseiten</h3>
+                <p class="text-gray-700 dark:text-gray-200 mb-4">
+                    Erstelle deine erste Webseite! Verstehe, wie HTML die Struktur definiert und CSS das Aussehen gestaltet.
+                </p>
+                <ul class="list-disc list-inside text-gray-600 dark:text-gray-300 space-y-1">
+                    <li>HTML-Struktur und Tags</li>
+                    <li>CSS-Selektoren und Styling</li>
+                    <li>Responsive Design mit Flexbox und Grid</li>
+                </ul>
+            </div>
+            <!-- Modul 3: Interaktive Webseiten mit JavaScript -->
+            <div class="bg-gray-50 dark:bg-gray-700 p-6 rounded-xl shadow-md hover:shadow-lg transition duration-300">
+                <h3 class="text-2xl font-semibold text-purple-700 dark:text-purple-300 mb-3">Modul 3: JavaScript Interaktivität</h3>
+                <p class="text-gray-700 dark:text-gray-200 mb-4">
+                    Bringe deine Webseiten zum Leben mit JavaScript. Lerne DOM-Manipulation, Event Handling und grundlegende Logik.
+                </p>
+                <ul class="list-disc list-inside text-gray-600 dark:text-gray-300 space-y-1">
+                    <li>Grundlagen von JavaScript</li>
+                    <li>Arbeiten mit dem DOM</li>
+                    <li>Formularvalidierung und Event-Handling</li>
+                </ul>
+            </div>
+            <!-- Füge hier bei Bedarf weitere Module hinzu -->
+        </div>
+    </section>
+
+    <!-- KI-Helfer-Bereich: Neuer Abschnitt mit Gemini API Integration -->
+    <section id="ai-helper" class="py-16 px-6 bg-gray-100 dark:bg-gray-900 rounded-lg shadow-md mx-4 mt-8 md:mx-auto max-w-6xl">
+        <h2 class="text-4xl font-bold text-center text-gray-800 dark:text-white mb-12">Dein KI-Programmierhelfer ✨</h2>
+        <div class="flex flex-col items-center">
+            <p class="text-xl text-gray-600 dark:text-gray-300 mb-6 text-center max-w-2xl">
+                Gib einen Programmierbegriff ein (z.B. "rekursion", "async/await", "lambda funktion"), und unser KI-Helfer erklärt ihn dir einfach und verständlich!
+            </p>
+            <input type="text" id="conceptInput" placeholder="Programmierbegriff eingeben..."
+                   class="w-full md:w-2/3 p-4 border border-gray-300 dark:border-gray-600 rounded-lg mb-4 text-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-800 dark:text-white">
+            <button id="explainButton"
+                    class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-full shadow-lg transition duration-300 transform hover:scale-105 inline-flex items-center justify-center">
+                ✨ Begriff erklären
+            </button>
+            <div id="loader" class="loader my-6"></div>
+            <div id="explanationOutput" class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md mt-8 w-full md:w-2/3 text-gray-800 dark:text-gray-200 text-lg leading-relaxed hidden">
+                <!-- Die Erklärung des LLM wird hier angezeigt -->
+            </div>
+            <div id="errorMessage" class="text-red-600 mt-4 text-center hidden">
+                Es gab ein Problem beim Abrufen der Erklärung. Bitte versuche es später noch einmal.
+            </div>
+        </div>
+    </section>
+
+    <!-- Ressourcen-Bereich -->
+    <section id="resources" class="py-16 px-6 bg-gray-100 dark:bg-gray-900 rounded-lg shadow-md mx-4 mt-8 md:mx-auto max-w-6xl">
+        <h2 class="text-4xl font-bold text-center text-gray-800 dark:text-white mb-12">Nützliche Ressourcen</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <!-- Ressource 1 -->
+            <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md hover:shadow-lg transition duration-300">
+                <h3 class="text-2xl font-semibold text-gray-700 dark:text-gray-200 mb-3">Offizielle Python Dokumentation</h3>
+                <p class="text-gray-600 dark:text-gray-300 mb-4">
+                    Die umfassende Referenz für die Python-Sprache. Ideal für tiefergehendes Lernen.
+                </p>
+                <a href="https://docs.python.org/3/" target="_blank" class="text-blue-600 hover:text-blue-800 font-medium">
+                    Zur Dokumentation &rarr;
+                </a>
+            </div>
+            <!-- Ressource 2 -->
+            <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md hover:shadow-lg transition duration-300">
+                <h3 class="text-2xl font-semibold text-gray-700 dark:text-gray-200 mb-3">Mozilla Developer Network (MDN)</h3>
+                <p class="text-gray-600 dark:text-gray-300 mb-4">
+                    Eine exzellente Quelle für Webentwicklung (HTML, CSS, JavaScript) mit vielen Beispielen.
+                </p>
+                <a href="https://developer.mozilla.org/de/" target="_blank" class="text-blue-600 hover:text-blue-800 font-medium">
+                    Zu MDN Web Docs &rarr;
+                </a>
+            </div>
+            <!-- Ressource 3 -->
+            <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md hover:shadow-lg transition duration-300">
+                <h3 class="text-2xl font-semibold text-gray-700 dark:text-gray-200 mb-3">Online-Code-Editoren</h3>
+                <p class="text-gray-600 dark:text-gray-300 mb-4">
+                    Perfekt zum schnellen Testen von Code-Snippets ohne lokale Installation.
+                </p>
+                <ul class="list-disc list-inside text-gray-600 dark:text-gray-300 space-y-1">
+                    <li><a href="https://replit.com/" target="_blank" class="text-blue-600 hover:text-blue-800">Replit</a></li>
+                    <li><a href="https://codepen.io/" target="_blank" class="text-blue-600 hover:text-blue-800">CodePen</a></li>
+                </ul>
+            </div>
+            <!-- Ressource 4 -->
+            <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md hover:shadow-lg transition duration-300">
+                <h3 class="text-2xl font-semibold text-gray-700 dark:text-gray-200 mb-3">Discord Server Link</h3>
+                <p class="text-gray-600 dark:text-gray-300 mb-4">
+                    Trete unserem Discord-Server bei, um Fragen zu stellen und dich mit der Community zu verbinden!
+                </p>
+                <!-- Ersetze 'DEIN_DISCORD_INVITE_LINK' durch den tatsächlichen Link zu deinem Discord-Server -->
+                <a href="DEIN_DISCORD_INVITE_LINK" target="_blank" class="text-blue-600 hover:text-blue-800 font-medium">
+                    Zum Discord Server &rarr;
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Kontakt-Bereich -->
+    <section id="contact" class="py-16 px-6 bg-white dark:bg-gray-800 rounded-lg shadow-md mx-4 mt-8 md:mx-auto max-w-6xl text-center">
+        <h2 class="text-4xl font-bold text-gray-800 dark:text-white mb-8">Noch Fragen? Kontaktiere uns!</h2>
+        <p class="text-xl text-gray-600 dark:text-gray-300 mb-8 max-w-2xl mx-auto">
+            Wenn du weitere Informationen benötigst oder spezielle Fragen zum Kurs hast, zögere nicht, uns zu kontaktieren.
+        </p>
+        <!-- Beispiel einer E-Mail-Adresse oder eines Discord-Handles -->
+        <p class="text-2xl font-semibold text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-500 mb-4">
+            E-Mail: <a href="mailto:deine-email@example.com" class="hover:underline">deine-email@example.com</a>
+        </p>
+        <p class="text-2xl font-semibold text-blue-600 dark:text-blue-400">
+            Discord: <span class="font-bold">@dein_discord_handle</span>
+        </p>
+    </section>
+
+    <!-- Footer-Bereich -->
+    <footer class="bg-gray-800 dark:bg-gray-900 text-white p-8 mt-12 rounded-t-xl">
+        <div class="container mx-auto text-center text-gray-400 dark:text-gray-500">
+            <p>&copy; 2025 Programmierkurs. Alle Rechte vorbehalten.</p>
+            <p class="mt-2">Erstellt für deine Discord Community.</p>
+        </div>
+    </footer>
+
+    <script>
+        // JavaScript für die Gemini API Integration
+        const conceptInput = document.getElementById('conceptInput');
+        const explainButton = document.getElementById('explainButton');
+        const explanationOutput = document.getElementById('explanationOutput');
+        const loader = document.getElementById('loader');
+        const errorMessage = document.getElementById('errorMessage');
+
+        explainButton.addEventListener('click', async () => {
+            const concept = conceptInput.value.trim();
+            if (!concept) {
+                explanationOutput.classList.add('hidden');
+                errorMessage.textContent = 'Bitte gib einen Begriff ein, den du erklärt haben möchtest.';
+                errorMessage.classList.remove('hidden');
+                return;
+            }
+
+            // Felder zurücksetzen und Lade-Indikator anzeigen
+            explanationOutput.classList.add('hidden');
+            explanationOutput.textContent = '';
+            errorMessage.classList.add('hidden');
+            loader.style.display = 'block'; // Lade-Indikator anzeigen
+
+            try {
+                // Prompt für das LLM
+                const prompt = `Erkläre den Programmierbegriff '${concept}' kurz und prägnant, als würdest du es einem Anfänger im Programmierkurs erklären.`;
+
+                let chatHistory = [];
+                chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+                const payload = { contents: chatHistory };
+                const apiKey = ""; // API-Schlüssel wird zur Laufzeit vom Canvas bereitgestellt
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP-Fehler! Status: ${response.status}`);
+                }
+
+                const result = await response.json();
+
+                // Überprüfen, ob die Antwort die erwartete Struktur hat
+                if (result.candidates && result.candidates.length > 0 &&
+                    result.candidates[0].content && result.candidates[0].content.parts &&
+                    result.candidates[0].content.parts.length > 0) {
+                    const text = result.candidates[0].content.parts[0].text;
+                    explanationOutput.textContent = text;
+                    explanationOutput.classList.remove('hidden');
+                } else {
+                    // Fehlerbehandlung, falls die Antwortstruktur unerwartet ist
+                    errorMessage.textContent = 'Die KI konnte keine Erklärung finden oder die Antwortstruktur ist unerwartet.';
+                    errorMessage.classList.remove('hidden');
+                }
+            } catch (error) {
+                console.error('Fehler beim Abrufen der Erklärung:', error);
+                errorMessage.textContent = `Ein Fehler ist aufgetreten: ${error.message}. Bitte versuche es später noch einmal.`;
+                errorMessage.classList.remove('hidden');
+            } finally {
+                loader.style.display = 'none'; // Lade-Indikator ausblenden
+            }
+        });
+
+        // JavaScript für den Dark Mode / Light Mode Umschalter
+        const themeToggle = document.getElementById('themeToggle');
+        const sunIcon = document.getElementById('sunIcon');
+        const moonIcon = document.getElementById('moonIcon');
+        const body = document.body;
+
+        // Funktion zum Setzen des Themas
+        function setTheme(theme) {
+            if (theme === 'dark') {
+                body.classList.add('dark');
+                sunIcon.classList.add('hidden');
+                moonIcon.classList.remove('hidden');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                body.classList.remove('dark');
+                sunIcon.classList.remove('hidden');
+                moonIcon.classList.add('hidden');
+                localStorage.setItem('theme', 'light');
+            }
+        }
+
+        // Initiales Laden des Themas aus dem Local Storage oder System-Präferenz
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme) {
+            setTheme(savedTheme);
+        } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            // Wenn keine Präferenz gespeichert ist, aber das System Dark Mode bevorzugt
+            setTheme('dark');
+        } else {
+            // Standardmäßig Light Mode
+            setTheme('light');
+        }
+
+        // Event-Listener für den Theme-Umschalter
+        themeToggle.addEventListener('click', () => {
+            if (body.classList.contains('dark')) {
+                setTheme('light');
+            } else {
+                setTheme('dark');
+            }
+        });
+    </script>
+</body>
+</html>
